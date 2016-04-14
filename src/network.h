@@ -1,36 +1,44 @@
-#pragma once
-#include "uv.h"
-#include "conn.h"
+#ifndef __NETWORK_H
+#define __NETWORK_H
 
+#include "cstl/cmap.h"
+#include "cstl/clist.h"
+
+#include "uv.h"
+
+typedef struct conn_s conn_t;
 typedef int (*recv_msg_callback)(char* buf, uint32_t size);
 
-class Network {
-public:
-	Network();
-	~Network();
-
-	int init();
-	void shutdown();
-
-	void run();
-
-	int udp_listen(const char* local_addr, int port);
-	Conn* kcp_conn(kcpuv_conv_t conv, const char* local_addr, int port);
-
-	Conn* get_conn_by_conv(kcpuv_conv_t conv);
-
-	int get_msg(kcpuv_msg_t* msg);
-
-public:
-	void on_recv_udp(const char* buf, ssize_t size, const struct sockaddr* addr);
-	Conn* add_conn(kcpuv_conv_t conv, const sockaddr* addr);
-	void push_msg(kcpuv_msg_t& msg);
-
-private:
-	uv_loop_t* _loop;
+typedef struct network_s
+{
+    uv_loop_t* _loop;
 	uv_udp_t _udp;
 
-	std::map<kcpuv_conv_t, Conn*> _map_conn;
+	map_t * _map_conn;
+	list_t * _queue_msg;
+}network_t;
 
-	std::list<kcpuv_msg_t> _queue_msg;
-};
+network_t * network_new(void);
+void network_del(network_t * thiz);
+
+int network_init(network_t * thiz);
+void network_shutdown(network_t * thiz);
+
+void network_run(network_t * thiz);
+
+int network_udp_listen(network_t * thiz, const char* local_addr, int port);
+conn_t * network_kcp_conn(network_t * thiz, kcpuv_conv_t conv, const char* local_addr, int port);
+
+conn_t * network_get_conn_by_conv(network_t * thiz, kcpuv_conv_t conv);
+
+int network_get_msg(network_t * thiz, kcpuv_msg_t ** msg);
+
+
+void network_on_recv_udp(network_t * thiz, const char* buf, ssize_t size, const struct sockaddr* addr);
+conn_t * network_add_conn(network_t * thiz, kcpuv_conv_t conv, const struct sockaddr* addr);
+void network_push_msg(network_t * thiz, kcpuv_msg_t * msg);
+
+
+
+#endif
+

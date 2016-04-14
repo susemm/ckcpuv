@@ -38,7 +38,7 @@ extern "C" {
 #endif
 
 struct kcpuv_s;
-typedef kcpuv_s* kcpuv_t;
+typedef struct kcpuv_s * kcpuv_t;
 
 typedef uint32_t kcpuv_conv_t;
 
@@ -48,6 +48,9 @@ typedef struct kcpuv_msg_t {
 	uint32_t size;
 } kcpuv_msg_t;
 
+#define FREE(ptr) if (ptr) { log_info("%d:%s free %p\n", __LINE__, __FUNCTION__, ptr); free(ptr); } else {log_err("%d:%s free null...", __LINE__, __FUNCTION__);}
+#define log_MALLOC(p) log_info("%d:%s malloc = %p\n", __LINE__, __FUNCTION__, p)
+
 KCPUV_API kcpuv_t kcpuv_create();
 KCPUV_API void kcpuv_destroy(kcpuv_t kcpuv);
 
@@ -56,7 +59,7 @@ KCPUV_API int kcpuv_connect(kcpuv_t kcpuv, kcpuv_conv_t conv, const char* addr, 
 
 KCPUV_API void kcpuv_run(kcpuv_t kcpuv);
 
-KCPUV_API int kcpuv_recv(kcpuv_t kcpuv, kcpuv_msg_t* msg);
+KCPUV_API int kcpuv_recv(kcpuv_t kcpuv, kcpuv_msg_t** msg);
 KCPUV_API int kcpuv_send(kcpuv_t kcpuv, kcpuv_conv_t conv, const void* data, uint32_t size);
 
 KCPUV_API void kcpuv_msg_free(kcpuv_msg_t* msg);

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __ERR_H
+#define __ERR_H
 
 #include <errno.h>
 #include "log.h"
@@ -97,5 +98,7 @@
 			goto e; \
 		} \
 	} while (0)
+#endif
+
 #endif
 

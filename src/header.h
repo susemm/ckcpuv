@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __HEADER_H
+#define __HEADER_H
 
 #include "uv.h"
 
@@ -35,4 +36,6 @@
 #ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC
 #include<crtdbg.h>
+#endif
+
 #endif

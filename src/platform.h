@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __PLATFORM_H
+#define __PLATFORM_H
 
 #if defined(linux) || defined(__linux) || defined(__linux__)
 # ifndef PLATFORM_LINUX
@@ -80,3 +81,6 @@
 # include <sstream>
 # include <stdexcept>
 #endif
+
+#endif
+
