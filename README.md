@@ -1,6 +1,9 @@
 # KCPUV
 
-使用[KCP](https://github.com/skywind3000/kcp)和[libuv](https://www.github.com/libuv/libuv)的简单网络模块。
+使用
+- [libcstl](https://github.com/activesys/libcstl)代替C++的STL
+- [KCP](https://github.com/skywind3000/kcp)和
+- [libuv](https://www.github.com/libuv/libuv)的简单网络模块。
 
 # 用法
 
@@ -30,7 +33,7 @@ void process_network() {
 	// 让kcpuv处理一下内部事务
 	kcpuv_run(kcpuv);
 
-	kcpuv_msg_t msg;
+	kcpuv_msg_t * msg;
 	while (true) {
 		// 接收消息
 		int r = kcpuv_recv(kcpuv, &msg);
@@ -40,7 +43,7 @@ void process_network() {
 		// ...
 
 		// 销毁消息
-		kcpuv_msg_free(&msg);
+		kcpuv_msg_free(msg);
 	}
 }
 ```
